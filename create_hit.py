@@ -32,4 +32,4 @@ def make_hit_from_template(html_file, context=dict(), hit_configuration='hit_con
 
 
 if __name__ == '__main__':
-    pprint(make_hit_from_template('phase_one.html', sandbox=False).get('HITId'))
+    pprint(make_hit_from_template('phase_two.html', sandbox=False).get('HITId'))

@@ -32,24 +32,28 @@ def get_results_from_hit(HITId, resulting_file):
             answer.update(assignment_extra_data)
             res.append(answer)
     if len(res) > 0:
+        print(f'Gonna write {len(res)} assignments')
         fieldnames = []
         for i in res:
             fieldnames.extend(i.keys())
 
         fieldnames = list(set(fieldnames))
 
-        with open(resulting_file, 'a', newline='') as csvfile:
+        with open(resulting_file, 'w', newline='') as csvfile:
             writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
             writer.writeheader()
 
     with open(resulting_file, 'a', newline='') as csvfile:
         writer = csv.DictWriter(csvfile, fieldnames=fieldnames)
-        for i in res:
-            print(i)
+        for j,i in enumerate(res):
+            if j%10 == 0:
+                print(j)
             writer.writerow(i)
 
 
 if __name__ == '__main__':
-    HITId = '33W1NHWFYI7TU50J3NV27GIVCTNTZ5'
-    resulting_file = './logs/results3.csv'
+    # HITId = '3ZQX1VYFTDVHB2QZWMJNVJH9LBZO8Z'
+    HITId = '33TGB4G0LP7N3VWF0BHE5S4PBU1XTI' #first test of phase 2
+    HITId = '3MQY1YVHS463S83QEUV3KB22MTIB2G' #second (n=100) test of phase 2
+    resulting_file = './logs/phase2results2.csv'
     get_results_from_hit(HITId, resulting_file)

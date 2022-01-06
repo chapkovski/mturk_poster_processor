@@ -38,6 +38,4 @@ def get_client(sandbox=False):
 
 
 if __name__ == '__main__':
-    pprint(client.get_hit(
-        HITId='3E6L1VR4XWC01BUI443ZOBC4NZ36FY'
-    ))
+    pprint(get_balance(get_client()))
