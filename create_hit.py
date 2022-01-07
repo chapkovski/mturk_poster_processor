@@ -4,7 +4,7 @@ from client import get_client
 from pprint import pprint
 import yaml
 import sys
-
+import os
 main_file_loader = FileSystemLoader('templates')
 main_env = Environment(loader=main_file_loader)
 template = main_env.get_template('template.xml')
@@ -32,4 +32,7 @@ def make_hit_from_template(html_file, context=dict(), hit_configuration='hit_con
 
 
 if __name__ == '__main__':
-    pprint(make_hit_from_template('phase_two.html', sandbox=False).get('HITId'))
+    nlp_token = os.environ.get('NLP_TOKEN')
+    pprint(make_hit_from_template('phase_two.html',
+                                  context=dict(nlp_token=nlp_token),
+                                  sandbox=True).get('HITId'))
