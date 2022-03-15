@@ -7,16 +7,17 @@ import sys
 import os
 main_file_loader = FileSystemLoader('templates')
 main_env = Environment(loader=main_file_loader)
-template = main_env.get_template('template.xml')
+
 # The following is needed just to check if xml is rendered correctly
 # from lxml import etree
 external_submit_live = 'https://www.mturk.com/mturk/externalSubmit'
 external_submit_sandbox = 'https://workersandbox.mturk.com/mturk/externalSubmit'
 
 
-def make_hit_from_template(html_file, context=dict(), hit_configuration='hit_configuration', sandbox=True):
+def make_hit_from_template(html_file, template='template.xml', context=dict(), hit_configuration='hit_configuration', sandbox=True):
     with open(f'./templates/{hit_configuration}.yaml') as file:
         hit_config = yaml.load(file, Loader=yaml.FullLoader)
+    template = main_env.get_template(template)
     context['endpoint'] = external_submit_sandbox if sandbox else external_submit_live
     html_data = main_env.get_template(html_file).render(context)
     html_question = template.render(html_data=html_data)
@@ -34,5 +35,6 @@ def make_hit_from_template(html_file, context=dict(), hit_configuration='hit_con
 if __name__ == '__main__':
     nlp_token = os.environ.get('NLP_TOKEN')
     pprint(make_hit_from_template('phase_two.html',
+                                  template='qftemplate.xml',
                                   context=dict(nlp_token=nlp_token),
                                   sandbox=True).get('HITId'))
