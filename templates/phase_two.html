@@ -3,264 +3,468 @@
 
 <head>
     <title>HIT</title>
-    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
     <script type='text/javascript' src='https://s3.amazonaws.com/mturk-public/externalHIT_v1.js'></script>
 </head>
 
-<body>
-  <title>HIT</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<script type='text/javascript' src='https://s3.amazonaws.com/mturk-public/externalHIT_v1.js'></script>
-</head>
 
 <body>
- <title>HIT</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<script type='text/javascript' src='https://s3.amazonaws.com/mturk-public/externalHIT_v1.js'></script>
-</head>
-
-<body>
-<title>HIT</title>
-<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
-<script type='text/javascript' src='https://s3.amazonaws.com/mturk-public/externalHIT_v1.js'></script>
-</head>
-
-<body>
-  <link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/@braid/vue-formulate@2.2.3/dist/snow.min.css'>
-  <link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans&display=swap'>
-  <link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css'>
-  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
-  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
-
-  <style>
+<link rel="stylesheet" href="https://surveyjs.io/DevBuilds/survey-core/modern.min.css"/>
+<link rel='stylesheet' href='https://cdn.jsdelivr.net/npm/@braid/vue-formulate@2.2.3/dist/snow.min.css'>
+<link rel='stylesheet' href='https://fonts.googleapis.com/css?family=Open+Sans&display=swap'>
+<link rel='stylesheet' href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css'>
+<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+<link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/survey-vue/1.9.19/survey.css" integrity="sha512-iIVxyLA0jA14HVVZ4amKwqyjaEi5YUpTRGKJWnVFaVwF/74JXSjPEvVPXZfi7Jy8X2LYtmo7ycc+SG2zvFI8XA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<style>
     .v-input__slider {
-      margin-top: 30px !important;
-      margin-left: 90px !important;
-      margin-right: 90px !important;
-      margin-bottom: 10px !important;
+        margin-top: 30px !important;
+        margin-left: 90px !important;
+        margin-right: 90px !important;
+        margin-bottom: 10px !important;
     }
 
     .v-slider__tick-label {
-      margin-top: 5px !important;
-      transform: translateX(-50%) !important;
-      margin-bottom: 10px !important;
+        margin-top: 5px !important;
+        transform: translateX(-50%) !important;
+        margin-bottom: 10px !important;
     }
 
     .v-slider__tick .v-slider__tick-label {
-      white-space: break-spaces;
-      width: 200px;
-      font-style: italic;
+        white-space: break-spaces;
+        width: 200px;
+        font-style: italic;
     }
-  </style>
+</style>
 
-  <div class="container">
-    <div class="row">
-      <div class="col">
 
-        <div id="app" v-cloak>
-          <v-app>
-            <v-alert border="left" colored-border color="deep-purple accent-4" elevation="2">
-              Thanks for participating in our online shopping survey! We're working hard to change how you get your stuff, and we'd love to know how good we are at coming up with why you bought what you bought.
-            </v-alert>
-            <formulate-form v-model='formValues' v-on:submit='checkForm' method='post' id='mturk_form' action='{{endpoint}}' ref="form">
-              <formulate-input type="hidden" name='timeSpent' v-model='timeSpent' id='timeSpent'>
-              </formulate-input>
+<div id="app" v-cloak>
+    <v-app>
+        <v-alert
+                border="left"
+                colored-border
+                color="deep-purple accent-4"
+                elevation="2"
+        >
+            Thanks for participating in our online shopping survey! We’d like some
+            feedback on how good we are with knowing why you bought something online.
+        </v-alert>
+        <div id="surveyElement">
+            <v-container>
+                <form
+                        method="post"
+                        id="mturk_form"
+                        action="{{endpoint}}"
+                        ref="form"
+                >
+                    <v-text-field
+                            label="Remember a product you’ve just ordered using online shopping. Enter the name of it and hit 'Get reasons'"
+                            placeholder="Remember a product you’ve just ordered using online shopping."
+                            outlined
+                            v-model="purchase"
+                            v-on:keypress.enter.prevent="addSurvey"
+                    ></v-text-field>
+                    <input
+                            type="hidden"
+                            id="inputAssignmentId"
+                            name="assignmentId"
+                            v-model="assignmentId"
+                    />
 
-              <input type="hidden" name='nlp_session_id' v-model='nlp_session_id' />
-              <input type="hidden" name='startTime' v-model='startTime' />
-              <formulate-input type="hidden" name='endTime' v-model='endTime' id='endTime'></formulate-input>
-
-              <formulate-input type="hidden" id="inputAssignmentId" name="assignmentId" v-model='assignmentId'> </formulate-input>
-
-              <div class="card my-3">
-                <div class="card-body d-flex">
-                  <formulate-input name="purchase" v-model='purchase' label='Remember a product you’ve just ordered using online shopping. Enter the name of it and hit “Get reasons”' validation="required" error-behavior="live" placeholder="Your  recent online purchase" :disabled='loading' v-on:keypress.enter.prevent='getValues'> </formulate-input>
-                  <button type="button" v-on:click='getValues' class='btn   m-3' :class='loading?"btn-secondary":"btn-primary"' :disabled='loading ||(!purchase)' v-if='!loaded'>
-                    <div v-if='!loading'>Get reasons</div>
-                    <v-progress-circular v-if='loading' indeterminate color="primary"></v-progress-circular>
-                  </button>
-                </div>
-              </div>
-
-              <div class="card my-3" v-if='reasons.length>0'>
-                <div class="card-header">Now consider these possible reasons why you ordered that product. Rate them in terms of how relevant they are:</div>
-                <div class="card-body">
-                  <div v-for='i, ind in reasons' class='' :style='ind>0?"margin-top:50px":""'>
-                    <input type="hidden" :name='`reason_${ind}`' :value='i.reason' />
-                    <input type="hidden" :name='`reason_${ind}_slider`' :value='i.value' />
-                    <div class='display-5 mt-2'><b>[[capFirst(i.reason)]]</b></div>
-
-                    <v-slider :tick-labels="ticksLabels" :max="ticksLabels.length - 1" step="1" ticks="always" tick-size="10" :thumb-color="i.touched?'red':'black'" thumb-label="always" v-model='i.value' v-on:change='i.touched=true'></v-slider>
-
-                  </div>
-                  <div class="my-3">
-                    <formulate-input name='why_order' type="textarea" v-model="why_order" label="Now can you type in in your own words, why did you order that item? " validation="required" validation-name="reason" error-behavior="live"></formulate-input>
-
-                    <formulate-input name='why_particular' type="textarea" label="Why did you pick the particular item you purchased?" validation="required" validation-name="particular item" error-behavior="live"></formulate-input>
-                    <div class='display-5 mt-2'><b>
-                        Finally: if your online shopping app presented you with good reasons why you purchased a product, and provided ides for other related products, would you be likely to use that feature?
-
-                      </b></div>
-                    <input type="hidden" name='appReasons' :value='appReasons' />
-                    <div class="my-3">
-                      <v-slider v-model="appReasons" :tick-labels="appReasonChoices" :min='1' :max="5" step="1" ticks="always" tick-size="4"></v-slider>
-                    </div>
-                    <div class="my-5">
-                      <formulate-input name='why_app' type="textarea" label="Why or why not?" validation="required" validation-name="reason for app" error-behavior="live"></formulate-input>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="row">
-                <div class="col">
-                  <div v-if='!submittable'>(You need to click on each slider above in order to proceed)</div>
-                  <button type="submit" class='btn   m-3' :class='loading?"btn-secondary":"btn-primary"' :disabled='!submittable' v-if='loaded'>
-                    <div v-if='!loading'>Submit</div>
-                    <v-progress-circular v-if='insubmission' indeterminate color="primary"></v-progress-circular>
-                  </button>
-                </div>
-              </div>
-
+                    <input
+                            v-for="(field, ind) in surveyResultsOutput"
+                            :key="ind"
+                            type="hidden"
+                            :id="field.name"
+                            :name="field.name"
+                            v-model="field.value"
+                    />
+                </form>
+                <v-dialog v-model="reformulateRequest">
+                    <v-card color="error" dark>
+                        <v-card-text>
+                            Please, reformulate!
+                            <v-btn @click="reformulateRequest = false"> Close</v-btn>
+                        </v-card-text>
+                    </v-card>
+                </v-dialog>
+                <v-dialog v-model="loading" persistent width="300">
+                    <v-card color="primary" dark>
+                        <v-card-text>
+                            Please stand by
+                            <v-progress-linear
+                                    indeterminate
+                                    color="white"
+                                    class="mb-0"
+                            ></v-progress-linear>
+                        </v-card-text>
+                    </v-card>
+                </v-dialog>
+                <v-row>
+                    <v-col>
+                        <v-alert type="info" v-if="survey">
+                            Your recent purchase was: <b>[[ purchase ]]</b></v-alert
+                        >
+                        <v-card v-if="!survey">
+                            <v-card-text>
+                                <v-btn @click="addSurvey" :disabled="!purchase.trim()"
+                                >Get Reasons
+                                </v-btn
+                                >
+                            </v-card-text>
+                        </v-card>
+                        <v-card v-if="survey">
+                            <survey :survey="survey"/>
+                        </v-card>
+                        <v-card v-if="false">
+                            <v-card-title>SURVEY RESULTS:</v-card-title>
+                            <v-card-text>
+                                <pre>              [[ surveyResultsOutput ]]</pre>
+                            </v-card-text>
+                        </v-card>
+                    </v-col>
+                </v-row>
+            </v-container>
         </div>
-        </formulate-form>
+    </v-app>
+</div>
 
-        </v-app>
-      </div>
 
-    </div>
-  </div>
-  </div>
+<script>
+    const urlParams = new URLSearchParams(window.location.search);
+    document.getElementById('inputAssignmentId').value = urlParams.get('assignmentId')
+</script>
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.24.0/axios.min.js"
+        integrity="sha512-u9akINsQsAkG9xjc1cnGF4zw5TFDwkxuc9vUp5dltDWYCSmyd0meygbvgXrlc/z7/o4a19Fb5V0OUE58J7dcyw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script src='https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.js'></script>
+<script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/survey-vue/1.9.19/survey.vue.min.js"
+        integrity="sha512-Oi9pYJpnLkLTMXRJ0c1RpbavA6ztolGnFiybNvrAkODxDPsGbqs3IcSXQ2GWRg274xMn64iJJ6lVj4y6Ab5gzw=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script id="rendered-js">
+    console.debug('JOPA', Survey)
+    Survey.StylesManager.applyTheme("modern");
 
-  <script>
-    // const urlParams = new URLSearchParams(window.location.search);
-    // document.getElementById('inputAssignmentId').value = urlParams.get('assignmentId')
-  </script>
-  <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.24.0/axios.min.js" integrity="sha512-u9akINsQsAkG9xjc1cnGF4zw5TFDwkxuc9vUp5dltDWYCSmyd0meygbvgXrlc/z7/o4a19Fb5V0OUE58J7dcyw==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script src='https://cdn.jsdelivr.net/npm/vue@2.6.11/dist/vue.js'></script>
-  <script src='https://cdn.jsdelivr.net/npm/@braid/vue-formulate@2.5/dist/formulate.min.js'></script>
-  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
-  <script id="rendered-js">
-    Vue.use(VueFormulate);
+    function objToList(object) {
+        return _.map(object, (v, k) => ({name: k, value: v}));
+    }
+
+    const fixedPages = [
+        {
+            name: "last",
+            elements: [
+                {
+                    type: "comment",
+                    name: "why_you_need",
+                    isRequired: true,
+                    title:
+                        "Now can you type in in your own words, why did you need that item? ",
+                },
+                {
+                    type: "comment",
+                    name: "why_particular_item",
+                    isRequired: true,
+                    title: "Why did you pick the particular item you purchased?",
+                },
+                {
+                    type: "rating",
+                    name: `would_us_app`,
+                    title:
+                        "Finally: if your online shopping app presented you with good reasons why you purchased a product, and interesting types of product to filter on, and provided ides for other related products, would you be likely to use that feature?",
+                    isRequired: true,
+
+                    rateMin: 0,
+                    rateMax: 5,
+                    minRateDescription: "No! I wouldn’t use that at all.",
+                    maxRateDescription: "Yes! That sounds really awesome; I’d love that!",
+                },
+                {
+                    type: "comment",
+                    name: "why_whynot_app",
+                    isRequired: true,
+                    title: "Why or why not?",
+                },
+            ],
+        },
+    ];
     new Vue({
-      el: '#app',
-      vuetify: new Vuetify(),
-      delimiters: ["[[", "]]"],
-      data: {
-        nlp_session_id: null,
-        why_order: null,
-        loading: false,
-        insubmission: false,
-        formValues: {},
-        assignmentId: null,
-        timeSpent: null,
-        reasons: [],
-        appReasonChoices: [
-          'No! I wouldn’t use that at all.',
-          '',
-          '',
-          '',
-          'Yes! That sounds really awesome; I’d love that!'
-        ],
-        appReasons: null,
-        ticksLabels: [
-          'Not even close! That’s not at all why I ordered that.',
-          '',
-          '',
-          '',
-          'Yes, perfect! That’s exactly why I ordered that!'
-        ],
-        startTime: new Date(),
-        endTime: null,
-        purchase: '',
-      },
-      created() {},
-      mounted() {
-        const urlParams = new URLSearchParams(window.location.search);
-        this.assignmentId = urlParams.get('assignmentId')
-      },
-      computed: {
-        loaded() {
-          return this.reasons && this.reasons.length > 0
+        el: '#app',
+        vuetify: new Vuetify(),
+        delimiters: ["[[", "]]"],
+        data() {
+            return {
+                surveyResultsOutput: [],
+                reformulateRequest: false,
+                loading: false,
+                surveyResultsShow: false,
+                purchase: "",
+                action_id: null,
+                nlp_session_id: null,
+                rawResults: null,
+                surveyResults: {},
+                rawReasons: [],
+                reasons: [],
+                angles: [],
+                assignmentId: "NO_ASSIGNMENT_ID",
+                counter: 0,
+                survey: null,
+            };
         },
-        submittable() {
-          if (!this.reasons) {
-            return false
-          }
-          return _.every(this.reasons, _.matches({
-            touched: true
-          }))
-        }
-      },
-      watch: {
-        purchase() {
-          this.reasons = [];
-          this.loading = false;
-        }
-      },
-      methods: {
-        capFirst(l) {
-          return _.upperFirst(l)
+        mounted() {
         },
-        async getValues() {
-          this.loading = true;
-          console.debug('send axios req')
-          var data = JSON.stringify({
-            "text": this.purchase,
-            "user_id": "629",
-            "location_string": "37.54885282501893, -122.00418917890447",
-            "decision_engine": true
-          });
-          var config = {
-            method: 'post',
-            url: 'https://api.braininc.net/be/bas-demo-v4/nlp/v4/domain_mapping',
-            headers: {
-              'Authorization': 'Token {{nlp_token}}',
-              'Content-Type': 'application/json'
+
+        methods: {
+            async sendRequest(action_id = null) {
+                this.loading = true;
+                var data = JSON.stringify({
+                    text: this.purchase,
+                    action_id: action_id,
+                    user_id: "629",
+                    location_string: "37.54885282501893, -122.00418917890447",
+                    decision_engine: true,
+                });
+                var config = {
+                    method: "post",
+                    url: "https://api.braininc.net/be/bas-demo-v4/nlp/v4/domain_mapping",
+                    headers: {
+                        Authorization: "Token {{nlp_token}}",
+                        "Content-Type": "application/json",
+                    },
+                    data: data,
+                };
+                try {
+                    const res = await axios(config);
+                    this.nlp_session_id = res.data.nlp_session_id;
+                    this.rawResults = res.data.results;
+                    if (this.rawResults && this.rawResults.length > 0) {
+                        this.action_id = this.rawResults[0].action_ids[0];
+                    }
+                } catch (error) {
+                    console.debug("IN SEND REQUEST something goes wrong with axios req");
+                    console.debug(error);
+                } finally {
+                    this.loading = false;
+                }
+                // we split these two stages so we can set rawResults
+                try {
+                    this.rawReasons = this.rawResults[0].decision_engine.reasons;
+                    const reasons = _.reduce(
+                        this.rawReasons,
+                        function (r, n) {
+                            const i = n.trim();
+                            if (i.length > 0) r.push(i);
+                            return r;
+                        },
+                        []
+                    );
+
+                    this.reasons = reasons.slice(0, 3);
+                    const rawAngles = this.rawResults[0].decision_engine.angles;
+                    const angles = _.reduce(
+                        rawAngles,
+                        function (r, n) {
+                            const i = n.trim();
+                            if (i.length > 0) r.push(i);
+                            return r;
+                        },
+                        []
+                    );
+                    this.angles = angles.slice(0, 3);
+                    const processedReasons = _.reduce(
+                        this.reasons,
+                        (result, value, key) => {
+                            result[`reason_${key}`] = value;
+                            return result;
+                        },
+                        {}
+                    );
+                    const processedAngles = _.reduce(
+                        this.angles,
+                        (result, value, key) => {
+                            result[`angle_${key}`] = value;
+                            return result;
+                        },
+                        {}
+                    );
+
+                    this.surveyResults = {...processedReasons, ...processedAngles};
+                } catch (error) {
+                    console.debug("cant get reasons and/or angles");
+                }
             },
-            data: data
-          };
-          try {
-            const res = await axios(config);
-            const reasons = res.data.results[0].decision_engine.reasons;
-            this.nlp_session_id = res.data.nlp_session_id;
-            if (reasons) {
-              this.reasons = _.map(reasons.slice(0, 3), i => ({
-                reason: i,
-                value: 2,
-                touched: false
-              }))
-            }
-            console.debug(this.reasons)
-          } catch (error) {
-            console.debug('something goes wrong with axios req')
-            console.debug(error)
-            this.purchase = '';
-          }
-          this.loading = false;
+            async findReasons() {
+                const action_ids = _.shuffle(
+                    _.map(this.rawResults, (i) => i.action_ids[0])
+                );
+                for (const action_id of action_ids) {
+                    await this.sendRequest(action_id);
+                }
+            },
+            async addSurvey() {
+                if (!this.purchase.trim()) {
+                    this.purchase = "";
+                    return;
+                }
+                await this.sendRequest();
+                if (this.reasons.length === 0) {
+                    await this.findReasons();
+                    if (this.reasons.length === 0) {
+                        this.reformulateRequest = true;
+                        this.purchase = "";
+                        this.loading = false;
+                        return;
+                    }
+                }
+
+                const reasons_pages = _.map(this.reasons, (i, ind) => {
+                    return {
+                        name: i,
+                        title: `Reason #${ind + 1}. ${_.upperFirst(i)}`,
+                        elements: [
+                            {
+                                type: "rating",
+                                name: `reason_${ind}_accurate`,
+                                title:
+                                    "Is this an accurate reason why you needed this product, when you ordered it? ",
+                                isRequired: true,
+                                rateMin: 0,
+                                rateMax: 5,
+                                minRateDescription:
+                                    "Not even close! That’s not at all why I ordered that.",
+                                maxRateDescription:
+                                    "Yes! This is an accurate reason why I ordered this product.",
+                            },
+                            {
+                                type: "rating",
+                                name: `reason_${ind}_specific`,
+                                title:
+                                    "Is this reason specific or is it too general? Does it have a clear relation to the product or the product’s category?",
+                                isRequired: true,
+                                rateMin: 0,
+                                rateMax: 5,
+                                minRateDescription:
+                                    "No, this is too general; this reason could apply to almost anything.",
+                                maxRateDescription:
+                                    "Yes, this is specifically why I ordered this product!",
+                            },
+                            {
+                                type: "rating",
+                                name: `reason_${ind}_interesting`,
+                                title:
+                                    "Would you find this reason interesting? Would it catch your attention?",
+                                isRequired: true,
+                                rateMin: 0,
+                                rateMax: 5,
+                                minRateDescription: "No, this reason isn’t very interesting.",
+                                maxRateDescription:
+                                    "Yes, this reason is very interesting and would catch my appention!",
+                            },
+                        ],
+                    };
+                });
+                const angles_pages = _.map(this.angles, (i, ind) => {
+                    return {
+                        name: i,
+                        title: `Feature/type #${ind + 1}. ${_.upperFirst(i)}`,
+                        elements: [
+                            {
+                                type: "rating",
+                                name: `angle_${ind}_looking_for`,
+                                title:
+                                    "Were you looking for this type of the product you ordered? ",
+                                isRequired: true,
+                                rateMin: 0,
+                                rateMax: 5,
+                                minRateDescription:
+                                    "No, I was not looking for that kind of product.",
+                                maxRateDescription:
+                                    "Yes! This is the kind of that product that I wanted.",
+                            },
+                            {
+                                type: "text",
+                                name: `angle_${ind}_comment`,
+                                isRequired: true,
+
+                                description:
+                                    "(can be anything that narrow your search such as waterproof, for outdoor activities, hypoallergenic, etc.)",
+                                visibleIf: `{angle_${ind}_looking_for} < 3`,
+                                title:
+                                    "Please specify the correct feature/label you were looking for",
+                            },
+                            {
+                                type: "rating",
+                                name: `angle_${ind}_specific`,
+                                title:
+                                    "Is this a specific enough type of the product you ordered? ",
+                                isRequired: true,
+                                // visibleIf: `{angle_${ind}_looking_for} > 2`,
+                                rateMin: 0,
+                                rateMax: 5,
+                                minRateDescription:
+                                    "No, this could apply to almost any type of that product.",
+                                maxRateDescription:
+                                    "his reason is specific to the context of the product or how I could be using the product",
+                            },
+                            {
+                                type: "rating",
+                                name: `angle_${ind}_eye_catching`,
+                                title:
+                                    "Did this evoke curiosity to search for other items or to think about other things?",
+                                isRequired: true,
+                                // visibleIf: `{angle_${ind}_looking_for} > 2`,
+                                rateMin: 0,
+                                rateMax: 5,
+                                minRateDescription: "No, this really isn’t that interesting.",
+                                maxRateDescription:
+                                    "Yes, this is a quite interesting and eye-catching.",
+                            },
+                            {
+                                type: "rating",
+                                name: `angle_${ind}_useful`,
+                                title:
+                                    "When you ordered this product, would showing only this type of product been useful to you?",
+                                isRequired: true,
+                                // visibleIf: `{angle_${ind}_looking_for} > 2`,
+                                rateMin: 0,
+                                rateMax: 5,
+                                minRateDescription: "No, that would not have been useful.",
+                                maxRateDescription: "Yes! That would have been great.",
+                            },
+                        ],
+                    };
+                });
+                const pages = reasons_pages.concat(angles_pages).concat(fixedPages);
+
+                const json = {
+                    goNextPageAutomatic: false,
+                    showCompletedPage: false,
+                    showPrevButton: false,
+                    showProgressBar: "top",
+                    pages: pages,
+                };
+                this.survey = new Survey.Model(json);
+                const that = this;
+                this.survey.onComplete.add(function (sender) {
+                    console.debug(sender.data);
+                    that.surveyResults = {
+                        nlp_session_id: that.nlp_session_id,
+                        action_id: that.action_id,
+                        ...that.surveyResults,
+                        ...sender.data,
+                    };
+
+                    that.surveyResultsOutput = objToList(that.surveyResults);
+                    that.$nextTick(() => {
+                        that.$refs.form.submit();
+                    });
+                });
+            },
         },
-        setTime() {
-          console.debug('submit clicked!')
-        },
-        async checkForm(e) {
-          if (!this.submittable) {
-            return false;
-          }
-          this.insubmission = true;
-          this.endTime = new Date();
-          this.timeSpent = this.endTime - this.startTime;
-          console.debug(this.timeSpent, this.endTime)
-          document.getElementById('timeSpent').value = this.timeSpent
-          document.getElementById('endTime').value = this.endTime
-          await document.getElementById('mturk_form').submit()
-          this.insubmission = false;
-          return true;
-        },
-      }
-    });
-  </script>
+    })
+</script>
 </body>
 
 </html>

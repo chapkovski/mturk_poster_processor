@@ -26,7 +26,7 @@ def make_hit_from_template(html_file, template='template.xml', context=dict(), h
     # The following is just to quickly check up that template results in a correct html file
     with open("logs/__temp.html", "w") as file:
         file.write(html_data)
-
+    return
     hit_config['Question'] = html_question
     hit = get_client(sandbox=sandbox).create_hit(**hit_config)['HIT']
     return hit
